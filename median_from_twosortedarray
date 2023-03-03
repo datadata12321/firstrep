@@ -1,0 +1,55 @@
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        double answer;
+        int s1 = nums1.size();
+        int s2 = nums2.size();
+        if (s1 == 0) {
+            if (s2 % 2 == 0) return (double)( nums2[(s2-1)/2] + nums2[s2/2] ) / 2;
+            else return nums2[(s2-1)/2];
+        }
+
+        else if (s2 == 0) {
+            if (s1 % 2 == 0) return (double)( nums1[(s1-1)/2] + nums1[s1/2] ) / 2;
+            else return nums1[(s1-1)/2];
+        }
+
+        int i = 0;
+        int k = 0;
+        int g1 = s1/8; 
+        int g2 = s2/8;
+        vector<int> v;
+        while ( i+k < s1+s2   ) {   
+
+            if ( (i < s1 && k < s2 && nums1[i] <= nums2[k]) || (k == s2) ) {
+                if (g1 > (s1+s2)/2 - i-k-2 ) g1 = ((s1+s2)/2-i-k-2)/2;
+                if (g1 <= 0) g1 = 1;
+                i = i + g1;
+                g1 = g1/2;
+                if (g1 <= 0) g1 = 1;
+                if ( i+k == (s1+s2)/2 ) {
+                    v.push_back(nums1[i-1]);
+                    if (i == s1 && k != s2) v.push_back(nums2[k]);
+                    else if (k != s2) v.push_back(min(nums1[i], nums2[k]));
+                    else if (k == s2) v.push_back(nums1[i]);
+                    break;
+                }
+            }
+
+            else {
+                if (g2 > (s1+s2)/2 - i-k-2 ) g2 = ((s1+s2)/2 - i-k-2)/2; 
+                if (g2 <= 0) g2 = 1;
+                k = k + g2;
+                g2 = g2/2;
+                if (g2 <= 0) g2 = 1;
+                if ( i+k == (s1+s2)/2 ) {
+                    v.push_back(nums2[k-1]);
+                    if (k == s2 && i != s1) v.push_back(nums1[i]);
+                    else if (i != s1) v.push_back(min(nums1[i], nums2[k]));
+                    else if (i == s1) v.push_back(nums2[k]);
+                    break;
+                }
+            }
+        }
+        if ((s1+s2)%2 == 0) answer = (double)v[0]+v[1];
+        else answer = (double)v[1]+v[1];
+        return answer/2;
+    }
