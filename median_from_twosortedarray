@@ -49,6 +49,7 @@
                 }
             }
         }
+        
         if ((s1+s2)%2 == 0) answer = (double)v[0]+v[1];
         else answer = (double)v[1]+v[1];
         return answer/2;
